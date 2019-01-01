@@ -2,7 +2,7 @@
   "name": "electron-boilerplate",
   "productName": "Electron Boilerplate",
   "description": "Starter for your Electron application",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
   "author": "Mr. Gumby <mr.gumby@example.com>",
   "copyright": "© 2017, Gumby inc.",
@@ -55,7 +55,10 @@
       "private": false
     }
   },
-  "repository": "https://github.com/marvink/penpaperdashboard.git",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/marvink/penpaperdashboard.git"
+  },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=none",
