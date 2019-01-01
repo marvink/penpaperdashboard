@@ -6,7 +6,7 @@
 import path from "path";
 import url from "url";
 import { app, Menu, ipcMain } from "electron";
-import { autoUpdater } from "electron-updater";
+const { autoUpdater } = require("electron-updater")
 import { devMenuTemplate } from "./menu/dev_menu_template";
 import { editMenuTemplate } from "./menu/edit_menu_template";
 import createWindow from "./helpers/window";
@@ -52,7 +52,7 @@ app.on("ready", () => {
     mainWindow.openDevTools();
   }
 
-  autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdatesAndNotify()
 });
 
 app.on("window-all-closed", () => {
