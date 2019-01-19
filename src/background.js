@@ -4,25 +4,17 @@
 // window from here.
 
 import path from "path";
-import url from "url";
-import { app, Menu, ipcMain } from "electron";
-const { autoUpdater } = require("electron-updater")
-import { devMenuTemplate } from "./menu/dev_menu_template";
-import { editMenuTemplate } from "./menu/edit_menu_template";
+const {app, BrowserWindow, Menu, protocol, ipcMain} = require('electron');
 import createWindow from "./helpers/window";
-
-// Special module holding environment variables which you declared
-// in config/env_xxx.json file.
+const log = require('electron-log');
+const {autoUpdater} = require("electron-updater");
 import env from "env";
 
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
 
-const setApplicationMenu = () => {
-  const menus = [editMenuTemplate];
-  if (env.name !== "production") {
-    menus.push(devMenuTemplate);
-  }
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
-};
+let mainWindow;
 
 // Save userData in separate folders for each environment.
 // Thanks to this you can use production and development versions of the app
@@ -33,38 +25,61 @@ if (env.name !== "production") {
 }
 
 app.on("ready", () => {
-  setApplicationMenu();
-
-  const mainWindow = createWindow("main", {
-    width: 1000,
-    height: 600
+  mainWindow = createWindow("main", {
+    width: 1920,
+    height: 1024, 
+    autoHideMenuBar: true
   });
 
-  mainWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "app.html"),
-      protocol: "file:",
-      slashes: true
-    })
-  );
+  mainWindow.loadURL(`file://${__dirname}/app.html#v${app.getVersion()}`);
 
   if (env.name === "development") {
     mainWindow.openDevTools();
   }
+  if (env.name === 'production') {
+    autoUpdater.checkForUpdates();
+  }
 
-  autoUpdater.checkForUpdatesAndNotify()
 });
 
 app.on("window-all-closed", () => {
   app.quit();
 });
 
-// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
-autoUpdater.on('update-downloaded', (info) => {
-  win.webContents.send('updateReady')
+function sendStatusToWindow(text) {
+  log.info(text);
+  mainWindow.webContents.send('message', text);
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
 });
 
-// when receiving a quitAndInstall signal, quit and install the new version ;)
-ipcMain.on("quitAndInstall", (event, arg) => {
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+});
+
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+});
+
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+});
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded');
   autoUpdater.quitAndInstall();
-})
+});
+
+app.on('window-all-closed', () => {
+  app.quit();
+});
+

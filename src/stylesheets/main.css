@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   width: 100%;
@@ -7,11 +11,8 @@ body {
 }
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-family: sans-serif;
-  color: #525252;
+  background: #f4f3ef;
 }
 
 a {
@@ -21,4 +22,41 @@ a {
 
 .container {
   text-align: center;
+}
+
+#updateMessage {
+  background: #5e5e5e;
+  color: #f4f3ef;
+  padding: 10px 20px;
+  top: 0;
+  position: absolute;
+  width: 100vw;
+  line-height: 1.4rem;
+}
+
+#updateMessage:empty {
+  top:-10000px;
+}
+
+.resizable {
+  position: relative;
+  resize: both;
+  display: block;
+  overflow: auto;
+  background: #fff;
+  min-width:200px;
+  min-height:200px;
+}
+
+.draggable {
+  position: absolute;
+}
+
+.dragbar {
+  border: 5px solid white;
+  background: red;
+  height: 13px;
+  display: block;
+  width: 100%;
+  cursor: move;  
 }

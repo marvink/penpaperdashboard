@@ -1,15 +1,13 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "description": "Starter for your Electron application",
-  "version": "0.0.1",
+  "name": "pen-paper-dashboard",
+  "productName": "Pen-Paper-Dashboard",
+  "version": "0.0.11",
   "private": true,
-  "author": "Mr. Gumby <mr.gumby@example.com>",
-  "copyright": "© 2017, Gumby inc.",
-  "homepage": "http://example.com",
+  "author": "Marvin Kerkhoff <mail@marvinkerkhoff.de>",
+  "copyright": "© 2019",
   "main": "app/background.js",
   "build": {
-    "appId": "com.example.electron-boilerplate",
+    "appId": "de.marvinkerkhoff.penpaperdashboard",
     "files": [
       "app/**/*",
       "node_modules/**/*",
@@ -52,12 +50,13 @@
       "provider": "github",
       "owner": "marvink",
       "repo": "penpaperdashboard",
-      "private": false
+      "private": false,
+      "releaseType": "release"
     }
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/marvink/penpaperdashboard.git"
+    "type": "git",
+    "url": "https://github.com/marvink/penpaperdashboard.git"
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
@@ -67,16 +66,13 @@
     "e2e": "mocha temp/e2e.js --require source-map-support/register",
     "test": "npm run unit && npm run e2e",
     "start": "node build/start.js",
-    "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder",
-    "package": "yarn build && electron-builder build --publish always",
-    "package-all": "yarn build && electron-builder build -mwl",
-    "package-ci": "yarn postinstall && yarn build && electron-builder --publish always",
-    "package-linux": "yarn build && electron-builder build --linux",
-    "package-win": "yarn build && electron-builder build --win --x64",
-    "package-publish": "electron-builder --publish always"
+    "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "dependencies": {
-    "fs-jetpack": "^2.1.0"
+    "electron-log": "^1.3.0",
+    "electron-updater": "^4.0.6",
+    "fs-jetpack": "^2.1.0",
+    "hammerjs": "^2.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.54",
@@ -85,7 +81,7 @@
     "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3",
     "chai": "^4.1.0",
     "css-loader": "^1.0.0",
-    "electron": "2.0.2",
+    "electron": "4.0.0",
     "electron-builder": "^20.15.1",
     "electron-mocha": "^6.0.4",
     "friendly-errors-webpack-plugin": "^1.7.0",

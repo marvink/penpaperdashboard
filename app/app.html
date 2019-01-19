@@ -1,39 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Electron Boilerplate</title>
+  <link rel="import" href="widget-resizable.html">
+  <link rel="import" href="widget-dice.html">
+  <title>Pen & Paper Dashboard</title>
+  
 </head>
 <body>
-    <script>
-      const ipcRenderer = require('electron').ipcRenderer;
-      // wait for an updateReady message
-      ipcRenderer.on('updateReady', function(event, text) {
-          // changes the text of the button
-          var container = document.getElementById('ready');
-          container.innerHTML = "new version ready!";
-      })
+  <div id="updateMessage"></div>
+  <script>
+    // Listen for messages
+    const {ipcRenderer} = require('electron');
+    ipcRenderer.on('message', function(event, text) {
+      var container = document.getElementById('updateMessage');
+      var message = document.createElement('div');
+      message.innerHTML = text;
+      container.appendChild(message);
+    });
   </script>
-  Version: <span id="version">v0.0.1</span>
-  <!-- the button onClick sends a quitAndInstall message to the electron main process -->
-  <button id="ready" onClick="ipcRenderer.send('quitAndInstall')">no updates ready</button>
-
-  <div id="app" class="container" style="display: none;">
-    <h1 id="greet"></h1>
-    <p>
-      test to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this <strong id="os"></strong> machine.
-    </p>
-    <p>
-      App author: <strong id="author"></strong>
-    </p>
-    <p>
-      Environment: <strong id="env"></strong>
-    </p>
-    <p>
-      Electron version: <strong id="electron-version"></strong>
-    </p>
-  </div>
-
+  <widget-dice class="resizable draggable"><div class="dragbar"></div></widget-dice>
   <script src="app.js"></script>
 </body>
 </html>

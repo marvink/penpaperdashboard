@@ -1,0 +1,43 @@
+<template>	
+	<slot></slot>
+	<div class="dice">
+		<button data-value="6">W6</button>
+		<button data-value="10">W10</button>
+		<button data-value="20">W20</button>
+		<button data-value="100">W100</button>
+		<input type="number" value="2"><button data-value="2">WX</button>
+		<div class="result">asdas</div>
+	</div>
+</template>
+
+<script>
+	// Refers to the "importer", which is parent .html
+	var thatDoc = document;
+	// Refers to the "importee", which is this .html
+	var thisDoc = thatDoc.currentScript.ownerDocument;
+
+	var template = thisDoc.querySelector( 'template' ).content;
+
+	class Dice extends HTMLElement {
+
+		constructor() {
+			super();
+			var shadowRoot = this.attachShadow({mode:'open'});
+
+			// Adds a template clone into shadow root.
+			shadowRoot.appendChild(template);
+			this.init(shadowRoot);
+		}
+
+		init(template) {
+			template.querySelector('.dice').addEventListener("click", function(event) {
+				if (event.target.tagName === 'BUTTON') {
+				template.querySelector('.result').innerHTML = Math.floor(Math.random()* Number.parseInt(event.target.dataset.value)+1)+"";	
+				}			
+			});
+		}
+		
+	}
+
+	window.customElements.define('widget-dice', Dice);
+</script>
